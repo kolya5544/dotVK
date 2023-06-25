@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
+using System.Xml.Linq;
 
 namespace dotVK
 {
@@ -55,6 +57,8 @@ namespace dotVK
 
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("members_count")]
+        public long MemberCount { get; set; }
     }
 
     public class VKConvIDRes
@@ -328,6 +332,16 @@ namespace dotVK
 
         [JsonProperty("is_hidden")]
         public bool IsHidden { get; set; }
+        [JsonProperty("action")]
+        public MessageAction Action { get; set; }
+    }
+
+    public class MessageAction
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+        [JsonProperty("member_id")]
+        public long MemberID { get; set; }
     }
 
     public class ContentSource
@@ -355,6 +369,186 @@ namespace dotVK
         public Sticker Sticker { get; set; }
         [JsonProperty("story")]
         public Story Story { get; set; }
+        [JsonProperty("wall")]
+        public Wall Wall { get; set; }
+        [JsonProperty("video")]
+        public VideoFile Video { get; set; }
+        [JsonProperty("audio")]
+        public Audio Audio { get; set; }
+        [JsonProperty("doc")]
+        public Doc Doc { get; set; }
+        [JsonProperty("audio_message")]
+        public AudioMessage AudioMessage { get; set; }
+        public Graffiti Graffiti { get; set; }
+    }
+
+    public class Graffiti
+    {
+        public int id { get; set; }
+        public int owner_id { get; set; }
+        public string url { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
+        public string access_key { get; set; }
+    }
+
+    public class AudioMessage
+    {
+        [JsonProperty("duration")]
+        public long Duration { get; set; }
+
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("link_mp3")]
+        public string LinkMp3 { get; set; }
+
+        [JsonProperty("link_ogg")]
+        public string LinkOgg { get; set; }
+
+        [JsonProperty("owner_id")]
+        public long OwnerId { get; set; }
+
+        [JsonProperty("access_key")]
+        public string AccessKey { get; set; }
+
+        [JsonProperty("transcript_state")]
+        public string TranscriptState { get; set; }
+
+        [JsonProperty("waveform")]
+        public List<long> Waveform { get; set; }
+    }
+
+    public partial class Audio
+    {
+        [JsonProperty("artist")]
+        public string Artist { get; set; }
+
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("owner_id")]
+        public long OwnerId { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("duration")]
+        public long Duration { get; set; }
+
+        [JsonProperty("is_explicit")]
+        public bool IsExplicit { get; set; }
+
+        [JsonProperty("is_focus_track")]
+        public bool IsFocusTrack { get; set; }
+
+        [JsonProperty("track_code")]
+        public string TrackCode { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("date")]
+        public long Date { get; set; }
+
+        [JsonProperty("genre_id")]
+        public long GenreId { get; set; }
+
+        [JsonProperty("short_videos_allowed")]
+        public bool ShortVideosAllowed { get; set; }
+
+        [JsonProperty("stories_allowed")]
+        public bool StoriesAllowed { get; set; }
+
+        [JsonProperty("stories_cover_allowed")]
+        public bool StoriesCoverAllowed { get; set; }
+    }
+
+    public partial class VideoFile
+    {
+        [JsonProperty("access_key")]
+        public string AccessKey { get; set; }
+
+        [JsonProperty("can_add")]
+        public long CanAdd { get; set; }
+
+        [JsonProperty("comments")]
+        public long Comments { get; set; }
+
+        [JsonProperty("date")]
+        public long Date { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("duration")]
+        public long Duration { get; set; }
+
+        [JsonProperty("width")]
+        public long Width { get; set; }
+
+        [JsonProperty("height")]
+        public long Height { get; set; }
+
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("owner_id")]
+        public long OwnerId { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("is_favorite")]
+        public bool IsFavorite { get; set; }
+
+        [JsonProperty("track_code")]
+        public string TrackCode { get; set; }
+
+        [JsonProperty("repeat")]
+        public long Repeat { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("views")]
+        public long Views { get; set; }
+        [JsonProperty("content_restricted")]
+        public long ContentRestricted { get; set; }
+    }
+
+    public class Wall
+    {
+        public int id { get; set; }
+        public int from_id { get; set; }
+        public int to_id { get; set; }
+        public int date { get; set; }
+        public int marked_as_ads { get; set; }
+        public int compact_attachments_before_cut { get; set; }
+        public List<Attachment> attachments { get; set; }
+        public int owner_id { get; set; }
+        public string post_type { get; set; }
+        public string text { get; set; }
+        public WallFrom from { get; set; }
+    }
+
+    public class WallFrom
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string screen_name { get; set; }
+        public bool is_closed { get; set; }
+        public string type { get; set; }
+        public string photo_50 { get; set; }
+        public string photo_100 { get; set; }
+    }
+
+    public class NameHolder
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string LinkName { get; set; }
+        public string GroupName { get; set; }
     }
 
     public class Story

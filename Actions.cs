@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -15,6 +16,8 @@ namespace VKBotExtensions
     public static class Actions
     {
         public static Random rng = new Random();
+        public static List<CachedNames> cache = new List<CachedNames>();
+
         public static long SendMessage(this VK bot, long peer, string body, string attachment = null, Forward fwd = null, ContentSource cs = null)
         {
             using (var w = new WebClient())
@@ -28,7 +31,7 @@ namespace VKBotExtensions
                 if (attachment != null) a.Add("attachment", attachment);
                 if (fwd != null) a.Add("forward", JsonConvert.SerializeObject(fwd));
                 if (cs != null) a.Add("content_source", JsonConvert.SerializeObject(cs));
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
                 string answ = w.DownloadString("https://api.vk.com/method/messages.send" + query);
                 Console.WriteLine(answ);
                 return 0;
@@ -44,7 +47,7 @@ namespace VKBotExtensions
                 a.Add("v", "5.126");
                 a.Add("message_ids", msgID.ToString());
                 a.Add("delete_for_all", "1");
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/messages.delete" + query);
             }
@@ -61,7 +64,7 @@ namespace VKBotExtensions
                 a.Add("v", "5.126");
                 a.Add("message_ids", ids);
                 a.Add("delete_for_all", "1");
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/messages.delete" + query);
                 Console.WriteLine(answ);
@@ -76,7 +79,7 @@ namespace VKBotExtensions
                 a.Add("access_token", bot.ACCESS);
                 a.Add("v", "5.130");
                 a.Add("peer_id", "0");
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/photos.getMessagesUploadServer" + query);
                 var b = JsonConvert.DeserializeObject<UploadServerRoot>(answ);
@@ -93,7 +96,7 @@ namespace VKBotExtensions
                 a.Add("v", "5.131");
                 a.Add("peer_id", peerID.ToString());
                 a.Add("type", "doc");
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/docs.getMessagesUploadServer" + query);
                 var b = JsonConvert.DeserializeObject<UploadServerRoot>(answ);
@@ -110,7 +113,7 @@ namespace VKBotExtensions
                 a.Add("v", "5.130");
                 a.Add("peer_id", "0");
                 a.Add("name", name);
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/video.save" + query);
                 var b = JsonConvert.DeserializeObject<UploadServerRoot>(answ);
@@ -166,7 +169,7 @@ namespace VKBotExtensions
                 a.Add("access_token", bot.ACCESS);
                 a.Add("v", "5.131");
                 a.Add("file", file);
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/docs.save" + query);
                 var b = JsonConvert.DeserializeObject<MessagesFileRoot>(answ);
@@ -232,7 +235,7 @@ namespace VKBotExtensions
                 a.Add("photo", photo);
                 a.Add("server", server.ToString());
                 a.Add("hash", hash);
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/photos.saveMessagesPhoto" + query);
                 var b = JsonConvert.DeserializeObject<MessagesPhotoRoot>(answ);
@@ -250,8 +253,8 @@ namespace VKBotExtensions
                 a.Add("access_token", bot.ACCESS);
                 a.Add("group_id", group_id.ToString());
                 a.Add("v", "5.130");
-                a.Add("fields", "description");
-                string query = Utils.ToQueryString(a);
+                a.Add("fields", "description, members_count");
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/groups.getById" + query);
                 var b = JsonConvert.DeserializeObject<GroupRoot>(answ);
@@ -269,14 +272,37 @@ namespace VKBotExtensions
                 a.Add("v", "5.130");
                 a.Add("fields", "photo_400_orig,photo_200");
                 a.Add("name_case", namecase);
-                string query = Utils.ToQueryString(a);
+                string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/users.get" + query);
                 var b = JsonConvert.DeserializeObject<ProfilePictureRoot>(answ);
                 return b.response[0];
             }
         }
+        
+        public static NameHolder GetName(this VK bot, long id, string namecase = "Nom", bool ignoreCache = false)
+        {
+            if (!ignoreCache)
+            {
+                var c = cache.FirstOrDefault((z) => z.id == id);
+                if (c != null) return c.name;
+            }
+            if (id < 0)
+            {
+                var gi = bot.GetGroupInfo(id);
+                return new NameHolder() { GroupName = gi.Name, LinkName = gi.ScreenName };
+            }
+            else
+            {
+                var a = bot.GetProfilePicture(id, namecase);
+                return new NameHolder() { FirstName = a.FirstName, LastName = a.LastName };
+            }
+        }
     }
 
-    
+    public class CachedNames
+    {
+        public long id;
+        public NameHolder name;
+    }
 }

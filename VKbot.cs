@@ -55,7 +55,7 @@ namespace dotVK
                     a.Add("v", "5.125");
                     a.Add("group_id", GROUP_ID.ToString());
 
-                    string query = Utils.ToQueryString(a);
+                    string query = VKUtils.ToQueryString(a);
 
                     string answ = w.DownloadString("https://api.vk.com/method/groups.getLongPollServer" + query);
                     UpdateServer u = JsonConvert.DeserializeObject<UpdateServer>(answ);
