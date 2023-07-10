@@ -268,7 +268,7 @@ namespace VKBotExtensions
                 a.Add("access_token", bot.ACCESS);
                 a.Add("user_ids", user_id.ToString());
                 a.Add("v", "5.130");
-                a.Add("fields", "photo_400_orig,photo_200");
+                a.Add("fields", "photo_400_orig,photo_200,screen_name");
                 a.Add("name_case", namecase);
                 string query = VKUtils.ToQueryString(a);
 
@@ -293,7 +293,7 @@ namespace VKBotExtensions
             else
             {
                 var a = bot.GetProfilePicture(id, namecase);
-                return new NameHolder() { FirstName = a.FirstName, LastName = a.LastName, FullName = $"{a.FirstName} {a.LastName}" };
+                return new NameHolder() { FirstName = a.FirstName, LastName = a.LastName, FullName = $"{a.FirstName} {a.LastName}", LinkName = a.ScreenName };
             }
         }
 

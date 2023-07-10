@@ -273,6 +273,8 @@ namespace dotVK
     public class ProfilePicture {
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
+        [JsonProperty("screen_name")]
+        public string ScreenName { get; set; }
 
         [JsonProperty("id")]
         public long Id { get; set; }
