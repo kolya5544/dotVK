@@ -288,12 +288,28 @@ namespace VKBotExtensions
             if (id < 0)
             {
                 var gi = bot.GetGroupInfo(id);
-                return new NameHolder() { GroupName = gi.Name, LinkName = gi.ScreenName };
+                return new NameHolder() { GroupName = gi.Name, LinkName = gi.ScreenName, FullName = gi.Name };
             }
             else
             {
                 var a = bot.GetProfilePicture(id, namecase);
-                return new NameHolder() { FirstName = a.FirstName, LastName = a.LastName };
+                return new NameHolder() { FirstName = a.FirstName, LastName = a.LastName, FullName = $"{a.FirstName} {a.LastName}" };
+            }
+        }
+
+        public static ResponseConversationMembers GetConversationMembers(this VK bot, long peerid)
+        {
+            using (var w = new WebClient())
+            {
+                var a = new NameValueCollection();
+                a.Add("access_token", bot.ACCESS);
+                a.Add("v", "5.131");
+                a.Add("peer_id", peerid.ToString());
+                string query = VKUtils.ToQueryString(a);
+
+                string answ = w.DownloadString("https://api.vk.com/method/messages.getConversationMembers" + query);
+                var b = JsonConvert.DeserializeObject<RootConversationMembers>(answ);
+                return b.response;
             }
         }
     }

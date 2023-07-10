@@ -549,6 +549,7 @@ namespace dotVK
         public string LastName { get; set; }
         public string LinkName { get; set; }
         public string GroupName { get; set; }
+        public string FullName { get; set; }
     }
 
     public class Story
@@ -649,5 +650,66 @@ namespace dotVK
 
         [JsonProperty("version")]
         public long Version { get; set; }
+    }
+
+    public class GroupConversationMembers
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string screen_name { get; set; }
+        public int is_closed { get; set; }
+        public string type { get; set; }
+        public string photo_50 { get; set; }
+        public string photo_100 { get; set; }
+        public string photo_200 { get; set; }
+    }
+
+    public class ItemConversationMembers
+    {
+        public int member_id { get; set; }
+        public bool can_kick { get; set; }
+        public int invited_by { get; set; }
+        public int join_date { get; set; }
+        public bool? is_admin { get; set; }
+        public bool? is_owner { get; set; }
+    }
+
+    public class OnlineInfo
+    {
+        public bool visible { get; set; }
+        public int last_seen { get; set; }
+        public bool is_online { get; set; }
+        public bool is_mobile { get; set; }
+        public string status { get; set; }
+        public int? app_id { get; set; }
+    }
+
+    public class ProfileConversationMembers
+    {
+        public int id { get; set; }
+        public int sex { get; set; }
+        public string screen_name { get; set; }
+        public string photo_50 { get; set; }
+        public string photo_100 { get; set; }
+        public OnlineInfo online_info { get; set; }
+        public int online { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public bool can_access_closed { get; set; }
+        public bool is_closed { get; set; }
+        public string deactivated { get; set; }
+    }
+
+    public class ResponseConversationMembers
+    {
+        public int count { get; set; }
+        public List<ItemConversationMembers> items { get; set; }
+        public List<ProfileConversationMembers> profiles { get; set; }
+        public List<GroupConversationMembers> groups { get; set; }
+    }
+
+    public class RootConversationMembers
+    {
+        public ResponseConversationMembers response { get; set; }
     }
 }
