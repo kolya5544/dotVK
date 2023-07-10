@@ -18,7 +18,7 @@ namespace VKBotExtensions
         public static Random rng = new Random();
         public static List<CachedNames> cache = new List<CachedNames>();
 
-        public static long SendMessage(this VK bot, long peer, string body, string attachment = null, Forward fwd = null, ContentSource cs = null)
+        public static string SendMessage(this VK bot, long peer, string body, string attachment = null, Forward fwd = null, ContentSource cs = null)
         {
             using (var w = new WebClient())
             {
@@ -33,7 +33,7 @@ namespace VKBotExtensions
                 if (cs != null) a.Add("content_source", JsonConvert.SerializeObject(cs));
                 string query = VKUtils.ToQueryString(a);
                 string answ = w.DownloadString("https://api.vk.com/method/messages.send" + query);
-                return 0;
+                return answ;
             }
         }
 
