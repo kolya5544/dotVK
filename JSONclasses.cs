@@ -679,7 +679,7 @@ namespace dotVK
     public class OnlineInfo
     {
         public bool visible { get; set; }
-        public int last_seen { get; set; }
+        public int? last_seen { get; set; }
         public bool is_online { get; set; }
         public bool is_mobile { get; set; }
         public string status { get; set; }
