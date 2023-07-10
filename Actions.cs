@@ -33,7 +33,6 @@ namespace VKBotExtensions
                 if (cs != null) a.Add("content_source", JsonConvert.SerializeObject(cs));
                 string query = VKUtils.ToQueryString(a);
                 string answ = w.DownloadString("https://api.vk.com/method/messages.send" + query);
-                Console.WriteLine(answ);
                 return 0;
             }
         }
@@ -67,7 +66,6 @@ namespace VKBotExtensions
                 string query = VKUtils.ToQueryString(a);
 
                 string answ = w.DownloadString("https://api.vk.com/method/messages.delete" + query);
-                Console.WriteLine(answ);
             }
         }
 

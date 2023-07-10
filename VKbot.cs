@@ -77,7 +77,6 @@ namespace dotVK
                 var jsonTask = http.GetStringAsync(Server_URL + "?act=a_check&key=" + Key + "&ts=" + ts + "&wait=10&mode=2&version=2");
                 jsonTask.Wait();
                 var result = jsonTask.Result;
-                Console.WriteLine(result);
                 if (result.Contains("failed"))
                 {
                     try
